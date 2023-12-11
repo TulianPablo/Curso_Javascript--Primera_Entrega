@@ -1,2 +1,2 @@
-# Curso_Javascript-Primera_Entrega
+# Primera_Entrega-Javascript-Coderhouse
 Repositorio primera entrega del curso de Conderhouse de Javascript
