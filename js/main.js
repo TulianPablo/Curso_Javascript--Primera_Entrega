@@ -1,3 +1,4 @@
+//Declaracion array de excursiones
 let excursiones=[
     {
         nombre:"Circuito chico",
@@ -23,7 +24,7 @@ let excursiones=[
     },
     {
         nombre:"Paseo en Barco a isla la Victoria y bosque de Arrayanes",
-        descripcion:"El paseo en barco a la Isla Victoria y al Bosque de Arrayanes es una experiencia fascinante que te sumergirá en la belleza natural de la región de los lagos en Argentina, específicamente en el Parque Nacional Nahuel Huapi, ubicado en la provincia de Neuquén y Río Negro",
+        descripcion:"El paseo en barco a la Isla Victoria y al Bosque de Arrayanes es una experiencia fascinante que te sumergirá en la belleza natural de la región de los lagos en Argentina, específicamente en el Parque Nacional Nahuel Huapi.",
         precio:45000,
         destino:"Bariloche",
         dificultad:"Baja",
@@ -35,7 +36,7 @@ let excursiones=[
     },
     {
         nombre:"Cataratas lado Argentino",
-        descripcion:"",
+        descripcion:"Visitarás el lado argentino de las Cataratas del Iguazú y sentirás de cerca la intensidad de la naturaleza.",
         precio: 21000,
         destino:"Puerto Iguazu,Misiones",
         dificultad:"Media",
@@ -119,7 +120,7 @@ let excursiones=[
     },
     {
         nombre:"Cerro Champaqui",
-        descripcion:"",
+        descripcion:"El Cerro Champaquí, ubicado en la provincia de Córdoba, es el pico más alto de las Sierras y ofrece una emocionante experiencia de trekking para los amantes de la naturaleza y los aficionados a las caminatas.",
         precio:45000,
         destino:"Sierras de Cordoba",
         dificultad:"Alta",
@@ -131,7 +132,7 @@ let excursiones=[
     },
     {
         nombre:"Los Gigantes, Cerro Mogote",
-        descripcion:"",
+        descripcion:"Con una altura de 2370 metros sobre el nivel del mar, el Cerro Mogote es considerado el más alto del macizo Los Gigantes. Una maravilla natural ubicada al extremo norte de Sierras Grandes, todo un paraíso para los amantes del trekking.",
         precio:12000,
         destino:"Sierras de Cordoba",
         dificultad:"Media",
@@ -143,7 +144,7 @@ let excursiones=[
     },
     {
         nombre:"Maravillas del Rio Yuspe",
-        descripcion:"",
+        descripcion:"Aguas bajo de los Gigantes, el hermoso Río Yuspe toma cuerpo y atraviesa la montaña durante varios kilometros, formando recovecos, playitas de arena, cajones y ollas sumamente bellas, exclusivas y poco conocidas!",
         precio:9000,
         destino:"Sierras de Cordoba",
         dificultad:"Baja",
@@ -155,11 +156,14 @@ let excursiones=[
     }
 ];
 
+//Declaracion de variables
 let carrito = [];
 let destino;
 let confirmacion;
-let traslado=3000;
+let precioTraslado=3000;
+let estadoCompra;
 
+//Funcion que muestra un menu con los destinos de excursiones disponibles 
 menuExcursiones();
 
 function menuExcursiones(){
@@ -167,6 +171,8 @@ function menuExcursiones(){
 do {
     
     destino = prompt("Bienvenido al sistema de excursiones Recorriendo Argentina!!!\n Ingrese su lugar de destino: \n1- Bariloche \n2- Puerto Iguazú,Misiones \n3- Mendoza \n4- Sierras de Cordoba \n0-Para salir");
+    estadoCompra=false;
+
     switch (destino) {
         case "1":
             operacionesMenu("Bariloche");
@@ -185,27 +191,19 @@ do {
             break;
 
         case "0":
-                prompt("Muchas gracias por visitar nuestra pagina de excursiones. Lo esperamos pronto!!");
+                alert("Muchas gracias por visitar nuestra pagina de excursiones. Lo esperamos pronto!!");
                 break;
         default:
             alert("Ingresaste un valor no valido");
             break;
     }
-
-    //Confirma la compra
-    confirmacion= confirm("Desea comprar alguna otra excursion?\n (Seleccione 'Aceptar' para continuar la compra y 'Cancelar' para confirmar la compra)")
-    if(confirmacion ==true)
-        continue;
-    else
-        alert("Compra realizada exitosamente " + mostrarCarritoCompras());
-        vaciarCarritoCompras();
-       
+           
 }
-while(destino !=0 && confirmacion==true);
+while(destino !=0);
 
 
 }
-
+//Funcion que realiza las distintas operaciones del carrito de compras de excursiones. Desde la seleccion de una excursion hasta la confirmacion de la compra.
 function operacionesMenu(destino){
 
       //Selecciona una excursion de un catalogo de excursiones
@@ -215,9 +213,10 @@ function operacionesMenu(destino){
       //Agrega la excusion al carrito de compras
       confirmacion= confirm("¿Desea agregar excursion:" + excursionSeleccionada.nombre + " al carrito de compras?\n Seleccione Aceptar para agregar excursion al carrito y Cancelar para volver al catalogo de excursiones");
       agregarExcursionCarrito(excursionSeleccionada, confirmacion);
+      confirmarCompra();
       
 }
-
+//Funcion que retorna las excursiones disponibles de un destino como parametro
 function excursionesPorDestino(destino)
 {   
     let excDestino="Seleccione la excursion a realizar del destino " + destino + ":";
@@ -232,60 +231,68 @@ function excursionesPorDestino(destino)
    
 }
 
+//Funcion que retorna el detalle de una excursion que recibe como parametro
 function mostrarExcursion(excursion)
 {
-
-    let detalleExcursion = "\nDestino: " + excursion.destino + 
+        
+    let detalleExcursion = "\nDestino: " + excursion.destino +
     "\nExcursion: " + excursion.nombre + 
     "\nDescripcion: " + excursion.descripcion +
     "\nValor: $ " + excursion.precio + 
     "\nDificultad:" + excursion.dificultad + 
-    "\nDuracion: " + excursion.duracion;
-    
-   /*  if(excursion.traslado==true){let traslado="Si";}
-        else {traslado="No"};
+    "\nDuracion: " + excursion.duracion +
+    "\nIncluyeTraslado: " + validarTraslado(excursion) + 
+    "\nIncluyeGuia: " + validarGuia(excursion);
 
-    if(excursion.guia==true){let guia="Si"}
-    else {guia="No"}; */
-
-
-    //detalleDuracion+="\nIncluyeTraslado: " + traslado + "Costo: " + validarTraslado(excursion); 
-    //detalleExcursion+="\nIncluyeGuia: " + guia + "Costo: $";
 
     return detalleExcursion;
-    
-};
+   };
 
-/* validarTraslado(excursion){
-    let costoTraslado='N/A';
-    if(excursion.traslado==true)
-        costoTraslado=traslado;
-    else{
-        return costoTraslado;
-    }
+//Funcion que valida si una excursion tiene costo de traslado
+function validarTraslado(excursion)
+{
+  let poseeTraslado="";
+   
+    if(excursion.traslado==true){
+        poseeTraslado="Si, Costo $" + precioTraslado;
+    }else {
+        poseeTraslado="No posee traslado"};
         
-return costoTraslado;
+return poseeTraslado;
 
-} */
+}
 
+//Funcion que valida si una excursion posee un guia
+function validarGuia(excursion){
+    let poseeGuia="";
+        if(excursion.guia==true){
+            poseeGuia="Si";
+        }else {
+            poseeGuia="No"};
+    return poseeGuia;
+}
+
+//Funcion que retorna el detalle del carrito de compra
 function mostrarCarritoCompras(){
 
     let detalleCarrito="";
     for (let i= 0; i < carrito.length; i++) {
     
-        detalleCarrito += "\n Excursion: " + carrito[i].nombre + "Valor: $" + carrito[i].precio;
+        detalleCarrito += "\nExcursion: " + carrito[i].nombre + " Valor: $ " + carrito[i].precio + " Traslado:" + validarTraslado(carrito[i]);
        
     }
-    detalleCarrito += "\n Costo Total Excursiones: $" + calcularTotal() + "\nCosto Total Traslado: $" + sumaTraslados() + "\n Costo Total Excusiones + Traslado: $ " + (calcularTotal() + sumaTraslados());
+
+    detalleCarrito += "\n\nCosto total excursiones: $" + calcularTotal() + "\nCosto total traslado: $" + sumaTraslados() + "\nCosto total con traslado: $ " + (calcularTotal() + sumaTraslados());
 
     return detalleCarrito;
 
 };
 
+//Funcion que recibe como parametro una excursion y la confirmación para agregar la excursion al carrito de compras, 
+//actualiza el cupo de la excursion en caso que se agregue al carrito, caso contrario le permite al usuario volver al catalogo de excursiones.
 function agregarExcursionCarrito(excursion, confirmacion)
 {
-    //confirmacion= confirm("¿Desea agregar excursion:" + excursion.nombre + " al carrito de compras?\n(Seleccione 'Aceptar' para agregarlo al carrito y 'Cancelar' para volver al catalogo de excursiones)");
-    //let completo;
+    
     if(confirmacion==true){
         if(mostrarCupo(excursion) >=1){
 
@@ -293,18 +300,15 @@ function agregarExcursionCarrito(excursion, confirmacion)
             actualizarCupo(excursion);
             alert("Se agrego al carrito la excusión:  " + excursion.nombre);
             alert("Detalle de la Compra: " + mostrarCarritoCompras());
-            //completo=false;
 
         }else
-            //completo= true;
             alert("Lo sentimos, el cupo esta completo para la excursion seleccionada");
             
     }     
     else
         menuExcursiones();
-    //return completo;
 }
-
+//Funcion que calcula y retorna el costo total de las excursiones agregadas al carrito, sumando el precio de c/u  de las excursiones.
 function calcularTotal(){
     let sumaTotal=0;
 
@@ -316,11 +320,13 @@ function calcularTotal(){
     return parseInt(sumaTotal);
 }
 
+//Funcion que retorna el cupo disponible de una excursion
 function mostrarCupo(excursion){
     return excursion.cupo;
             
 }
 
+//Funcion que actualiza el cupo disponible de una excursion
 function actualizarCupo(excursion)
 {
    excursion.cupo= (mostrarCupo(excursion) -1);
@@ -328,15 +334,20 @@ function actualizarCupo(excursion)
 
 }
 
+//Funcion que vacia el carrito de compras
 function vaciarCarritoCompras(){
     carrito=[];
 }
+
+//Funcion que realiza la suma del precio del traslado de cada excursion agregada al carrito y retorna la sumatoria.
+//Cabe aclarar que esta sumatoria aplica a todas las excursiones agregadas al carrito que poseen traslado=true.
+//Para esos casos el importe de traslado, se debe sumar al precio de la excursion. 
 
 function sumaTraslados(){
     let sumaTraslados=0;
     for(const excursion of carrito){
         if(excursion.traslado==true){
-            sumaTraslados+=traslado;
+            sumaTraslados+=precioTraslado;
    
         }
     }
@@ -344,19 +355,20 @@ function sumaTraslados(){
 };
  
 
-
-/* function confirmarCompra(){
-    let confirmacion= confirm("Presione 'Aceptar' para confirmar la compra y 'Cancelar' para cancelar la compra" );
-    if (confirmacion==true){
-        alert("Compra realizada exitosamente!!");
-        alert("Detall de la compra realizada: \n" + mostrarCarritoCompras());
-    }   
-    else
-        alert("Compra de excursiones cancelada");
-
-    carrito=[];
-    console.log(mostrarCarritoCompras());
-} */
+//Funcion que realiza la confirmacion de la compra, validando que la compra se encuentre en proceso(estadoCompra==false) para mostrar la confirmación. 
+//estadoCompra: True(Compra terminada)/False(Compra en Proceso)
+function confirmarCompra(){
+      
+    if(estadoCompra!==true){
+        confirmacion= confirm("Desea comprar alguna otra excursion?\n (Seleccione 'Aceptar' para continuar la compra y 'Cancelar' para confirmar la compra)")
+        if(confirmacion ==true)
+            menuExcursiones();
+        else
+            alert("Compra realizada exitosamente!" + mostrarCarritoCompras());
+            estadoCompra=true;
+            vaciarCarritoCompras();
+    }
+}
 
 
 
