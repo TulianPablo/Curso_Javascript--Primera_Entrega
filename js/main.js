@@ -211,7 +211,7 @@ function operacionesMenu(destino){
       //Muestra el detalle de la excusion seleccionada
       alert("Detalle de la excursion " + excursionSeleccionada.nombre + "\n" + mostrarExcursion(excursionSeleccionada));
       //Agrega la excusion al carrito de compras
-      confirmacion= confirm("¿Desea agregar excursion:" + excursionSeleccionada.nombre + " al carrito de compras?\n Seleccione Aceptar para agregar excursion al carrito y Cancelar para volver al catalogo de excursiones");
+      confirmacion= confirm("¿Desea agregar excursion: " + excursionSeleccionada.nombre + " al carrito de compras?\nSeleccione Aceptar para agregar excursion al carrito \nSeleccione Cancelar para volver al catalogo de excursiones");
       agregarExcursionCarrito(excursionSeleccionada, confirmacion);
       confirmarCompra();
       
@@ -301,9 +301,11 @@ function agregarExcursionCarrito(excursion, confirmacion)
             alert("Se agrego al carrito la excusión:  " + excursion.nombre);
             alert("Detalle de la Compra: " + mostrarCarritoCompras());
 
-        }else
+        }else{
             alert("Lo sentimos, el cupo esta completo para la excursion seleccionada");
-            
+            menuExcursiones();
+        }
+                
     }     
     else
         menuExcursiones();
@@ -360,7 +362,7 @@ function sumaTraslados(){
 function confirmarCompra(){
       
     if(estadoCompra==false){
-        confirmacion= confirm("Desea comprar alguna otra excursion?\n (Seleccione 'Aceptar' para continuar la compra y 'Cancelar' para confirmar la compra)")
+        confirmacion= confirm("Desea comprar alguna otra excursion?\nSeleccione 'Aceptar' para continuar la compra \nSeleccione 'Cancelar' para confirmar la compra")
         if(confirmacion ==true)
             menuExcursiones();
         else
@@ -369,6 +371,7 @@ function confirmarCompra(){
             vaciarCarritoCompras();
     }
 }
+
 
 
 
