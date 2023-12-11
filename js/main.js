@@ -359,7 +359,7 @@ function sumaTraslados(){
 //estadoCompra: True(Compra terminada)/False(Compra en Proceso)
 function confirmarCompra(){
       
-    if(estadoCompra!==true){
+    if(estadoCompra==false){
         confirmacion= confirm("Desea comprar alguna otra excursion?\n (Seleccione 'Aceptar' para continuar la compra y 'Cancelar' para confirmar la compra)")
         if(confirmacion ==true)
             menuExcursiones();
